@@ -39,7 +39,7 @@ with open('export', 'w') as f:
     i_row = k_row
     print("Next Steps")
     while queue:
-        if j_row % 1000:
+        if j_row % 1000 == 0:
             print(i_row, j_row, k_row)
             if len(set(queue)) >= 5 * 10**6:
                 with open('status', 'w') as f_status:
