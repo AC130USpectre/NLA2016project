@@ -1,4 +1,3 @@
-import numpy as np
 import vk
 
 session = vk.Session()
@@ -29,20 +28,23 @@ with open('export', 'w') as f:
     print("Initial step")
     for member in members:
         members_done[member] = True
-        friends = api.friends.get(user_id=member)
-        for friend in friends:
-            f.writelines("{} {}\n".format(member, friend))
-            queue.append(friend)
-            k_row = k_row + 1
+        try:
+            friends = api.friends.get(user_id=member)
+            for friend in friends:
+                f.writelines("{} {}\n".format(member, friend))
+                queue.append(friend)
+                k_row = k_row + 1
+        except:
+            continue
     i_row = k_row
     print("Next Steps")
     while queue:
         if j_row % 1000:
             print(i_row, j_row, k_row)
-            if np.unique(queue).shape[0] >= 5 * 10**6:
+            if len(set(queue)) >= 5 * 10**6:
                 with open('status', 'w') as f_status:
                     f_status.writelines("Очередь слишком большая: {}, i ={}, j={}, k={}".format(
-                        np.unique(queue).shape[0], i_row, j_row, k_row))
+                        len(set(queue)), i_row, j_row, k_row))
                     break
 
         val = queue.pop(0)  # Вытаскиваем id из очереди
